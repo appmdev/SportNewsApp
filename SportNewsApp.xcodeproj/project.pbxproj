@@ -14,6 +14,8 @@
 		047EF71A2796E19800B02612 /* SportNewsAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047EF7192796E19800B02612 /* SportNewsAppTests.swift */; };
 		047EF7252796E19800B02612 /* SportNewsAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047EF7242796E19800B02612 /* SportNewsAppUITests.swift */; };
 		047EF7382796E29000B02612 /* NewsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047EF7372796E29000B02612 /* NewsVC.swift */; };
+		047EF73A2796E4C500B02612 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047EF7392796E4C500B02612 /* UIViewExtension.swift */; };
+		047EF73C2796E4F900B02612 /* UIColourExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047EF73B2796E4F900B02612 /* UIColourExtension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +49,8 @@
 		047EF7242796E19800B02612 /* SportNewsAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportNewsAppUITests.swift; sourceTree = "<group>"; };
 		047EF7262796E19800B02612 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		047EF7372796E29000B02612 /* NewsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsVC.swift; sourceTree = "<group>"; };
+		047EF7392796E4C500B02612 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
+		047EF73B2796E4F900B02612 /* UIColourExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColourExtension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -161,6 +165,8 @@
 		047EF7362796E26500B02612 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				047EF7392796E4C500B02612 /* UIViewExtension.swift */,
+				047EF73B2796E4F900B02612 /* UIColourExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -295,7 +301,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				047EF7382796E29000B02612 /* NewsVC.swift in Sources */,
+				047EF73C2796E4F900B02612 /* UIColourExtension.swift in Sources */,
 				047EF7032796E19500B02612 /* AppDelegate.swift in Sources */,
+				047EF73A2796E4C500B02612 /* UIViewExtension.swift in Sources */,
 				047EF7052796E19500B02612 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
