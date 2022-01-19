@@ -29,7 +29,7 @@ class NewsVC: UIViewController {
         tableView.dataSource = self
         // set row height
 //        tableView.rowHeight = 250
-//                tableView.rowHeight = UITableView.automaticDimension
+                tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = UITableView.automaticDimension
         
         // register cells
@@ -53,7 +53,7 @@ extension NewsVC: UITableViewDataSource, UITableViewDelegate {
         // ajusting line between cells
         cell.separatorInset = UIEdgeInsets.init(top: 0.0, left: 120.0, bottom: 0.0, right: 25.0)
         cell.layoutMargins = UIEdgeInsets.init(top: 0.0, left: 100.0, bottom: 0.0, right: 0.0)
-        cell.setArticle()
+        cell.setArticleStaticTestInfo()
         return cell
     }
     
