@@ -26,6 +26,7 @@ class ArticleRealm: Object {
     }
     convenience init(id: String, title: String, category: String, shortDescr: String, fullDescr: String, timeAndDate: String, imageWebURL: String){
         self.init()
+        
         self.id = id
         self.title = title
         self.category = category

@@ -49,7 +49,7 @@ class ArticleTVCell: UITableViewCell {
         imageConstraint.isActive = true
         
     }
-    func setArticle(article: ArticleRealm) {
+    func setArticle(withArticle article: ArticleRealm) {
         
         iconImageArticle.image = UIImage(named: "emptyThumbnailSport")
         titleLabelArticle.text = article.title
