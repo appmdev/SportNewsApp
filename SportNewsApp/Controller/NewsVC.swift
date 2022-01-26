@@ -35,6 +35,7 @@ class NewsVC: UIViewController {
         setupFirstLoad()
         setupTableView()
         loadMore()
+        setupRefresh()
         
     }
     
@@ -68,8 +69,35 @@ class NewsVC: UIViewController {
         tableView.tableFooterView = UIView()
         tableView.pin(to: view)
     }
-
-
+    
+    private func setupRefresh() {
+        
+        // Add Refresh Control to Table View
+        if #available(iOS 10.0, *) {
+            tableView.refreshControl = refreshControl
+        } else {
+            tableView.addSubview(refreshControl)
+        }
+        // Configure Refresh Control
+        refreshControl.addTarget(self, action: #selector(refreshNewsData(_:)), for: .valueChanged)
+        refreshControl.tintColor = .greenMain()
+        refreshControl.attributedTitle = NSAttributedString(string: "Fetching Articles Data ...")
+    }
+    private func LoadMoreTop() {
+        networkArticlesManager.getArticleDataFromWeb(pagNr: 0, category: category)
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
+    }
+    @objc private func refreshNewsData(_ sender: Any) {
+        
+        DispatchQueue.main.async {
+            // Fetch  Data
+            self.LoadMoreTop()
+            self.refreshControl.endRefreshing()
+            self.tableView.reloadData()
+        }
+    }
 }
 extension NewsVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -87,5 +115,36 @@ extension NewsVC: UITableViewDataSource, UITableViewDelegate {
         //cell.setArticleStaticTestInfo()
         return cell
     }
-    
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        
+        // UITableView only moves in one direction, y axis
+        let currentOffset = scrollView.contentOffset.y
+        let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
+        
+        // Change 10.0 to adjust the distance from bottom
+        if maximumOffset - currentOffset <= 10.0 {
+            self.loadMore()
+        }
+    }
+    // MARK: - Navigation
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if tableView == self.tableView {
+            tableView.deselectRow(at: indexPath, animated: true)
+            let article = articlesRealm[indexPath.row]
+            showArticleInfoController(withArticle: article)
+            tableView.frame.origin.x = 0
+        }
+
+    }
+    private func navigateNextVC(rootVC: UIViewController) {
+        if let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }){
+            window.rootViewController = UINavigationController(rootViewController: rootVC);
+        }
+    }
+    private func showArticleInfoController(withArticle article: ArticleRealm) {
+        
+        let rootVC = DetailNewsVC()
+        rootVC.selectedArticle = article
+        self.navigationController?.pushViewController(rootVC, animated: true)
+    }
 }

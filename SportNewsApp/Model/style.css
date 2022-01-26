@@ -1,0 +1,56 @@
+/*
+//  style.css
+//  SportNewsApp
+//
+//  Created by Mac on 26/01/2022.
+*/
+
+import Foundation
+
+@font-face {
+    font-family: "Titillium Web";
+    font-weight: normal;
+    src: url("TitilliumWeb-Regular.ttf")
+}
+@font-face {
+    font-family: "Titillium Web";
+    font-style: italic;
+    src: url("TitilliumWeb-Italic.ttf")
+}
+@font-face {
+    font-family: "Titillium Web";
+    font-weight: bold;
+    src: url("TitilliumWeb-Bold.ttf")
+}
+body {
+    margin: 0px;
+    font-family: "Titillium Web";
+    font-weight: normal;
+    font-size: 14pt;
+/*    display:block; background:#f3f6f7; padding:13px; border-radius:3px; border-left:#6faa93 5px solid;*/
+/*    text-decoration:none; color:#222;*/
+}
+/*div.txt_foto {font-style:normal !important;}*/
+/*div.quote {display:block; background:#f3f6f7; padding:13px; border-radius:3px; border-left:#6faa93 5px solid;}*/
+
+div.quote {
+    margin: 0px;*/
+    font-family: "Titillium Web";
+    font-weight: normal;
+    font-size: 14pt;
+
+    display:block; background:#f3f6f7; padding:13px; border-radius:3px; border-left:#6faa93 5px solid;
+    text-decoration:none; color:#222;
+}
+
+i.txt_foto {font-style:normal !important;font-size: 8pt;}
+
+/*h2 {*/
+/*    display:inline-block; font-weight:bold; margin:0; color:#222;*/
+/*    background:#f3f3f3*/
+/*}*/
+
+blockquote.twitter-tweet {min-height:auto;}
+
+/*.mainto.fullstory .content .quote {display:block; background:#f3f6f7; padding:13px; border-radius:3px; border-left:#6faa93 5px solid;}*/
+/*.mainto.fullstory .content .quote a {text-decoration:none; color:#222;}*/

@@ -69,4 +69,64 @@ struct NetworkArticlesManager {
         }
         task.resume()
     }
+    //  ***************  ***************  ***************  ***************
+    
+    func getFirstArticleDataFromWeb(firstArticleId: String, category: String){
+        
+        // link for GET Request
+        let urlString = "https://80.87.193.171/post2/api/read\(category).php"
+        
+        guard let url = URL(string: urlString) else {return}
+        let session = URLSession(configuration: .default)
+        let task = session.dataTask(with: url) { (data, response, error) in
+            if error != nil {
+                print(error as Any)
+                return
+            }
+            if let jsonData = data {
+                let decoder = JSONDecoder()
+                do {
+                    
+                    let articles: ArticlesWeb = try decoder.decode(ArticlesWeb.self, from: jsonData)
+                    
+                    let firstArticleWebInt = Int(articles.body?.first?.id ?? "0")
+                    let firstArticleLocalInt = Int(firstArticleId)
+                    
+                    if firstArticleWebInt == firstArticleLocalInt {
+                        DispatchQueue.main.async {
+                            StoreageManager.deleteAll()
+                        }
+                    }
+                    
+                    for i in 0..<articles.body!.count {
+                        
+                        let article = articles.body![i]
+                        
+                        let stringId = article.id
+                        let title = article.title ?? "title"
+                        let category = article.category ?? "1"
+                        let shortStory = article.shortStory ?? "descr"
+                        let fullStory = article.fullStory ?? "loading"
+                        let timeDate = article.date ?? "date"
+                        var imageWebUrl = String()
+                        //  ***************  ***************  ***************  ***************
+                        if let startIndex = fullStory.range(of: "https://football24.ru/uploads/")?.lowerBound {
+                            let endIndex = fullStory.range(of: "|")!.lowerBound
+                            let range = startIndex..<endIndex
+                            imageWebUrl = String(fullStory[range])
+                        }
+                        //  ***************  ***************  ***************  ***************
+                        let thisArticle = ArticleRealm(id: stringId, title: title, category: category, shortDescr: shortStory, fullDescr: fullStory, timeAndDate: timeDate, imageWebURL: imageWebUrl)
+                        
+                        DispatchQueue.main.async {
+                            StoreageManager.saveObject(thisArticle)
+                        }
+                    }
+                } catch let error as NSError {
+                    print(error.localizedDescription)
+                }
+            }
+        }
+        task.resume()
+    }
 }
