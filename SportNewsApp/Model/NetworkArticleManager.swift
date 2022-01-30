@@ -74,7 +74,7 @@ struct NetworkArticlesManager {
     func getFirstArticleDataFromWeb(firstArticleId: String, category: String){
         
         // link for GET Request
-        let urlString = "https://80.87.193.171/post2/api/read\(category).php"
+        let urlString = "http://appdeve.site/serv/api/read\(category).php"
         
         guard let url = URL(string: urlString) else {return}
         let session = URLSession(configuration: .default)
