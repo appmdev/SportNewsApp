@@ -68,6 +68,7 @@ class DetailNewsVC: UIViewController, WKNavigationDelegate, WKScriptMessageHandl
     override func viewDidLoad() {
         super.viewDidLoad()
         let html = selectedArticle.fullDescr ?? "Article not found"
+        print(html)
         loadHTMLContent(html)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0) {
             self.setupSubviews()

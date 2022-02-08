@@ -1,15 +1,15 @@
 //
-//  NewsVC.swift
+//  ArticlesVC.swift
 //  SportNewsApp
 //
-//  Created by Mac on 18/01/2022.
+//  Created by Mac on 31/01/2022.
 //
-//
+
 
 import UIKit
 import RealmSwift
 
-class NewsVC: UIViewController {
+class ArticleVC: UIViewController {
     
     // **************  **************  **************
     // MARK: - Refresh Controll
@@ -142,7 +142,7 @@ class NewsVC: UIViewController {
         }
     }
     private func LoadMoreTop() {
-        networkArticlesManager.getArticleDataFromWeb(pagNr: 1, category: category)
+        networkArticlesManager.getArticleDataFromWeb(pagNr: 0, category: category)
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }
@@ -157,7 +157,7 @@ class NewsVC: UIViewController {
         }
     }
 }
-extension NewsVC: UITableViewDataSource, UITableViewDelegate {
+extension ArticleVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         var nrOfRows = 0

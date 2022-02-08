@@ -13,7 +13,11 @@ struct NetworkArticlesManager {
     func getArticleDataFromWeb(pagNr page: Int, category: String) {
         
         // link for GET Request From server.
-        let urlString = "http://appdeve.site/serv/api/read\(category).php?page=\(page)"
+        // get articles from created server.
+        //let urlString = "https://appdeve.site/serv/api/read\(category).php?page=\(page)"
+        // autoposts scraped direclty from original site
+        let urlString = "https://appdeve.site/autoposts/articles/read\(category).php?page=\(page)"
+        
         getArticlesHelper(withUrlString: urlString)
     }
     
@@ -21,7 +25,7 @@ struct NetworkArticlesManager {
         
         let decoder = JSONDecoder()
         do {
-            let articles: ArticlesWeb = try decoder.decode(ArticlesWeb.self, from: jsonData)
+            let articles: ArticlesWebS = try decoder.decode(ArticlesWebS.self, from: jsonData)
             
             for i in 0..<articles.body!.count {
                 
@@ -34,15 +38,18 @@ struct NetworkArticlesManager {
                 let shortStory = article.shortStory ?? "descr"
                 let fullStory = article.fullStory ?? "loading"
                 let timeDate = article.date ?? "date"
-                var imageWebUrl = String()
+                let country = article.country ?? "World"
+                let imageWebUrl = article.imageThumbLink ?? "error in downloading my comment"
+                
                 //  ***************  ***************  ***************  ***************
-                if let startIndex = fullStory.range(of: "https://football24.ru/uploads/")?.lowerBound {
-                    let endIndex = fullStory.range(of: "|")!.lowerBound
-                    let range = startIndex..<endIndex
-                    imageWebUrl = String(fullStory[range])
-                }
+                //var imageWebUrlHQ = String()
+                //if let startIndex = fullStory.range(of: "https://football24.ru/uploads/")?.lowerBound {
+                //    let endIndex = fullStory.range(of: "|")!.lowerBound
+                //    let range = startIndex..<endIndex
+                //    imageWebUrlHQ = String(fullStory[range])
+                //}
                 //  ***************  ***************  ***************  ***************
-                let thisArticle = ArticleRealm(id: stringId, title: title, category: category, shortDescr: shortStory, fullDescr: fullStory, timeAndDate: timeDate, imageWebURL: imageWebUrl)
+                let thisArticle = ArticleRealm(id: stringId, title: title, category: category, country: country, shortDescr: shortStory, fullDescr: fullStory, timeAndDate: timeDate, imageWebURL: imageWebUrl)
                 
                 DispatchQueue.main.async {
                     StoreageManager.saveObject(thisArticle)
@@ -74,7 +81,11 @@ struct NetworkArticlesManager {
     func getFirstArticleDataFromWeb(firstArticleId: String, category: String){
         
         // link for GET Request
-        let urlString = "http://appdeve.site/serv/api/read\(category).php"
+        // get articles from created server.
+        //let urlString = "https://appdeve.site/serv/api/read\(category).php"
+        // autoposts scraped direclty from original site
+        let page = 1
+        let urlString = "https://appdeve.site/autoposts/articles/read\(category).php?page=\(page)"
         
         guard let url = URL(string: urlString) else {return}
         let session = URLSession(configuration: .default)
@@ -87,20 +98,12 @@ struct NetworkArticlesManager {
                 let decoder = JSONDecoder()
                 do {
                     
-                    let articles: ArticlesWeb = try decoder.decode(ArticlesWeb.self, from: jsonData)
-                    
-                    let firstArticleWebInt = Int(articles.body?.first?.id ?? "0")
-                    let firstArticleLocalInt = Int(firstArticleId)
-                    
-                    if firstArticleWebInt == firstArticleLocalInt {
-                        DispatchQueue.main.async {
-                            StoreageManager.deleteAll()
-                        }
-                    }
+                    let articles: ArticlesWebS = try decoder.decode(ArticlesWebS.self, from: jsonData)
                     
                     for i in 0..<articles.body!.count {
                         
                         let article = articles.body![i]
+                        //print(article)
                         
                         let stringId = article.id
                         let title = article.title ?? "title"
@@ -108,19 +111,23 @@ struct NetworkArticlesManager {
                         let shortStory = article.shortStory ?? "descr"
                         let fullStory = article.fullStory ?? "loading"
                         let timeDate = article.date ?? "date"
-                        var imageWebUrl = String()
+                        let country = article.country ?? "World"
+                        let imageWebUrl = article.imageThumbLink ?? "error in downloading my comment"
+                        
                         //  ***************  ***************  ***************  ***************
-                        if let startIndex = fullStory.range(of: "https://football24.ru/uploads/")?.lowerBound {
-                            let endIndex = fullStory.range(of: "|")!.lowerBound
-                            let range = startIndex..<endIndex
-                            imageWebUrl = String(fullStory[range])
-                        }
+                        //var imageWebUrlHQ = String()
+                        //if let startIndex = fullStory.range(of: "https://football24.ru/uploads/")?.lowerBound {
+                        //    let endIndex = fullStory.range(of: "|")!.lowerBound
+                        //    let range = startIndex..<endIndex
+                        //    imageWebUrlHQ = String(fullStory[range])
+                        //}
                         //  ***************  ***************  ***************  ***************
-                        let thisArticle = ArticleRealm(id: stringId, title: title, category: category, shortDescr: shortStory, fullDescr: fullStory, timeAndDate: timeDate, imageWebURL: imageWebUrl)
+                        let thisArticle = ArticleRealm(id: stringId, title: title, category: category, country: country, shortDescr: shortStory, fullDescr: fullStory, timeAndDate: timeDate, imageWebURL: imageWebUrl)
                         
                         DispatchQueue.main.async {
                             StoreageManager.saveObject(thisArticle)
                         }
+                    
                     }
                 } catch let error as NSError {
                     print(error.localizedDescription)

@@ -19,7 +19,7 @@ class StoreageManager {
 
     static func deleteAll() {
         try! realm.write {
-            // realm.deleteAll()
+            realm.deleteAll()
         }
     }
 }
