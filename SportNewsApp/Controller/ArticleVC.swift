@@ -50,8 +50,8 @@ class ArticleVC: UIViewController {
         StoreageManager.deleteAll()
         setupHamMenu()
         setupFirstLoad()
-        let firstArticleId = articlesRealm.first?.id ?? "0"
-        networkArticlesManager.getFirstArticleDataFromWeb(firstArticleId: firstArticleId, category: category)
+        //let firstArticleId = articlesRealm.first?.id ?? "0"
+        //networkArticlesManager.getFirstArticleDataFromWeb(firstArticleId: firstArticleId, category: category)
         setupNewsView()
         setupMenuTableView()
         setupTableView()

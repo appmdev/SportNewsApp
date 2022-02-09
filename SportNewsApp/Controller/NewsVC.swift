@@ -36,11 +36,12 @@ class NewsVC: UIViewController {
     
     var networkArticlesManager = NetworkArticlesManager()
     var articlesRealm: Results<ArticleRealm>!
+    let list = realm.objects(ArticleRealm.self).sorted(byKeyPath: "id", ascending: true)
     let category = "Articles"
     // number of items to be fetched each time (i.e., database LIMIT)
-    let itemsPerBatch = 4
+    //let itemsPerBatch = 20
     // Where to start fetching items (database OFFSET)
-    var currentPage: Int = 1
+    var currentPage: Int = 2
 
     override func viewDidLoad() {
         
@@ -50,12 +51,13 @@ class NewsVC: UIViewController {
         StoreageManager.deleteAll()
         setupHamMenu()
         setupFirstLoad()
-        let firstArticleId = articlesRealm.first?.id ?? "0"
-        networkArticlesManager.getFirstArticleDataFromWeb(firstArticleId: firstArticleId, category: category)
+        networkArticlesManager.getArticleDataFromWeb(pagNr: 1, category: category)
+        
         setupNewsView()
         setupMenuTableView()
         setupTableView()
         setupRefresh()
+        networkArticlesManager.getArticleDataFromWeb(pagNr: 2, category: category)
     }
     // **************  **************  **************
     // Hamburger menu Func
@@ -95,8 +97,9 @@ class NewsVC: UIViewController {
     
     private func setupFirstLoad() {
         articlesRealm = realm.objects(ArticleRealm.self)
-        let countArticles = articlesRealm.count
-        currentPage = (countArticles / itemsPerBatch) + 1
+        //let countArticles = articlesRealm.count
+        //currentPage = (countArticles / itemsPerBatch) + 1
+        articlesRealm = articlesRealm.sorted(byKeyPath: "id", ascending: false)
     }
     
     private func setupTableView() {
@@ -142,6 +145,7 @@ class NewsVC: UIViewController {
         }
     }
     private func LoadMoreTop() {
+        //StoreageManager.deleteAll()
         networkArticlesManager.getArticleDataFromWeb(pagNr: 1, category: category)
         DispatchQueue.main.async {
             self.tableView.reloadData()
@@ -153,7 +157,10 @@ class NewsVC: UIViewController {
             // Fetch  Data
             self.LoadMoreTop()
             self.refreshControl.endRefreshing()
-            self.tableView.reloadData()
+            //self.tableView.reloadData()
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
         }
     }
 }
@@ -225,7 +232,7 @@ extension NewsVC: UITableViewDataSource, UITableViewDelegate {
         let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
         
         // Change 10.0 to adjust the distance from bottom
-        if maximumOffset - currentOffset <= 10.0 {
+        if maximumOffset - currentOffset <= 100.0 {
             self.loadMore()
         }
     }

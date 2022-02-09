@@ -52,7 +52,8 @@ class ArticleTVCell: UITableViewCell {
     func setArticle(withArticle article: ArticleRealm) {
         
         iconImageArticle.image = UIImage(named: "emptyThumbnailSport")
-        titleLabelArticle.text = article.title
+        //titleLabelArticle.text = article.title
+        titleLabelArticle.text = article.id
         dateTimeLabel.text = article.timeAndDate
         shotDescriptionLabe.text = article.shortDescr
         

@@ -12,6 +12,7 @@ import RealmSwift
 class ArticleRealm: Object {
     
     @objc dynamic var id = String()
+    //@objc dynamic var intId = Int()
     @objc dynamic var title = ""
     @objc dynamic var category = ""
     @objc dynamic var country = ""
@@ -29,6 +30,7 @@ class ArticleRealm: Object {
         self.init()
         
         self.id = id
+        //self.intId = intId
         self.title = title
         self.category = category
         self.country = country
