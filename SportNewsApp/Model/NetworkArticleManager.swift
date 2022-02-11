@@ -12,16 +12,21 @@ struct NetworkArticlesManager {
     func getArticleDataFromWeb(pagNr page: Int, category: String) {
         
         // link for GET Request From server.
+        // ***************  ***************  ***************  ***************
         // get articles from created server.
-        //let urlString = "https://appdeve.site/serv/api/read\(category).php?page=\(page)" // comment/uncomment me with next line of code
-        //let checkDatabase = true // this line
+        //let urlString = "https://appdeve.site/serv/api/read\(category).php?page=\(page)" // comment/uncomment me with next line of code nr1
+        //let checkDatabase = true // this line nr1
+        // ***************  ***************  ***************  ***************
         
         // autoposts scraped direclty from original site
-        let urlString = "https://appdeve.site/autoposts/articles/read\(category)Web.php?page=\(page)"
+        let urlString = "https://appdeve.site/autoposts/articles/read\(category)Web.php?page=\(page)"// comment/uncomment me with next line of code nr2
+        let checkDatabase = false // this line nr2
         
+        // ***************  ***************  ***************  ***************
         // autoposts scraped direclty from original site but has first 10 pages articles scraped in files on the side server
-        //let urlString = "https://appdeve.site/autoposts/articles/read\(category).php?page=\(page)" // comment/uncomment me with next line of code
-        let checkDatabase = false // this line
+        //let urlString = "https://appdeve.site/autoposts/articles/read\(category).php?page=\(page)" // comment/uncomment me with next line of code nr3
+        //let checkDatabase = false // this line nr3
+        // ***************  ***************  ***************  ***************
         
         getArticlesHelper(withUrlString: urlString, checkDatabase: checkDatabase)
     }
@@ -61,7 +66,7 @@ struct NetworkArticlesManager {
                 let thisArticle = ArticleRealm(id: stringId, title: title, category: category, country: country, shortDescr: shortStory, fullDescr: fullStory, timeAndDate: timeDate, imageWebURL: imageWebUrl)
                 
                 DispatchQueue.main.async {
-                    StoreageManager.saveObject(thisArticle)
+                    StorageManager.saveObject(thisArticle)
                 }
             }
         } catch let error as NSError {

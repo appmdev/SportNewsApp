@@ -52,9 +52,10 @@ class ArticleTVCell: UITableViewCell {
     func setArticle(withArticle article: ArticleRealm) {
         
         iconImageArticle.image = UIImage(named: "emptyThumbnailSport")
-        //titleLabelArticle.text = article.title
-        titleLabelArticle.text = article.id
-        dateTimeLabel.text = article.timeAndDate
+        titleLabelArticle.text = article.title
+        let dateArticle = article.timeAndDate
+        let timeDateToDisplay = StorageManager.formatMyDateTime(yourDateTime: dateArticle)
+        dateTimeLabel.text = timeDateToDisplay
         shotDescriptionLabe.text = article.shortDescr
         
         if let imageWebURL = article.imageWebURL {
@@ -72,8 +73,6 @@ class ArticleTVCell: UITableViewCell {
         imageConstraint.isActive = true
         
     }
-    
-    
     
     private func setupArticleTVCellLayouts() {
         

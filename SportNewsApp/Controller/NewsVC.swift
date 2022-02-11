@@ -38,8 +38,7 @@ class NewsVC: UIViewController {
     var articlesRealm: Results<ArticleRealm>!
     let list = realm.objects(ArticleRealm.self).sorted(byKeyPath: "id", ascending: true)
     let category = "Articles"
-    // number of items to be fetched each time (i.e., database LIMIT)
-    //let itemsPerBatch = 20
+
     // Where to start fetching items (database OFFSET)
     var currentPage: Int = 2
 
@@ -48,7 +47,7 @@ class NewsVC: UIViewController {
         super.viewDidLoad()
         self.view.backgroundColor = .greenMain()
         
-        StoreageManager.deleteAll()
+        StorageManager.deleteAll()
         setupHamMenu()
         setupFirstLoad()
         networkArticlesManager.getArticleDataFromWeb(pagNr: 1, category: category)
@@ -97,8 +96,6 @@ class NewsVC: UIViewController {
     
     private func setupFirstLoad() {
         articlesRealm = realm.objects(ArticleRealm.self)
-        //let countArticles = articlesRealm.count
-        //currentPage = (countArticles / itemsPerBatch) + 1
         articlesRealm = articlesRealm.sorted(byKeyPath: "id", ascending: false)
     }
     
@@ -145,7 +142,6 @@ class NewsVC: UIViewController {
         }
     }
     private func LoadMoreTop() {
-        //StoreageManager.deleteAll()
         networkArticlesManager.getArticleDataFromWeb(pagNr: 1, category: category)
         DispatchQueue.main.async {
             self.tableView.reloadData()

@@ -47,7 +47,7 @@ class ArticleVC: UIViewController {
         super.viewDidLoad()
         self.view.backgroundColor = .greenMain()
         
-        StoreageManager.deleteAll()
+        StorageManager.deleteAll()
         setupHamMenu()
         setupFirstLoad()
         //let firstArticleId = articlesRealm.first?.id ?? "0"

@@ -12,7 +12,29 @@ import RealmSwift
 class DetailNewsVC: UIViewController, WKNavigationDelegate, WKScriptMessageHandler {
     
     // MARK: Properties
-    var selectedArticle = ArticleRealm()
+    //var selectedArticle = ArticleRealm()
+    //  ***********  ***********  ***********  ***********
+    // MARK: Properties
+    var selectedArticle = ArticleRealm() {
+        didSet {
+            
+            let article = selectedArticle
+            
+            let dateArticle = article.timeAndDate
+            let timeDateToDisplay = StorageManager.formatMyDateTime(yourDateTime: dateArticle)
+            titleLabel.text = article.title
+            dateTimePublicatedLabel.text = timeDateToDisplay
+            authorNameLabel.text = "Artur Pirajcov"
+            visualizatIonNumbersLabel.text = String(getVisualizations())
+            commentsIonNumbersLabel.text = String(getVisualizations())
+            
+            func getVisualizations() -> Int {
+                let visualizations: Int = Int(arc4random_uniform(10000))
+                return visualizations
+            }
+        }
+    }
+    //  ***********  ***********  ***********  ***********
     let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.showsVerticalScrollIndicator = false
@@ -25,11 +47,126 @@ class DetailNewsVC: UIViewController, WKNavigationDelegate, WKScriptMessageHandl
         view.backgroundColor = .white
         return view
     }()
+    //  ***********  ***********  ***********  ***********
+    // Top view
     let topView: UIView = {
         let view = UIView()
-        view.backgroundColor = .blue
+        view.backgroundColor = .white
         return view
     }()
+    let bottomView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        return view
+    }()
+    lazy var stackViewFirst: UIStackView = {
+        let stackView = UIStackView()
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
+    }()
+    lazy var stackViewSecond: UIStackView = {
+        let stackView = UIStackView()
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
+    }()
+    lazy var view1: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    lazy var view2: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    lazy var view3: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    let titleLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = ""
+        label.numberOfLines = 0
+        label.font = UIFont.systemFont(ofSize: 22, weight: .bold)
+        return label
+    }()
+    let authorLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Author:"
+        label.textColor = .lightGray
+        label.font = UIFont.systemFont(ofSize: 14)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    let authorNameLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .greenMain()
+        label.font = UIFont.boldSystemFont(ofSize: 14)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    let dateTimeimageView: UIImageView = {
+        let iv = UIImageView()
+        iv.backgroundColor = .white
+        iv.image?.withRenderingMode(.alwaysTemplate)
+        iv.tintColor = .lightGray
+        iv.contentMode = .scaleAspectFit
+        iv.image = UIImage(systemName: "clock")
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        return iv
+    }()
+    let dateTimePublicatedLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .lightGray
+        label.font = UIFont.systemFont(ofSize: 14)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    let visualizationImageView: UIImageView = {
+        let iv = UIImageView()
+        iv.backgroundColor = .white
+        iv.image?.withRenderingMode(.alwaysTemplate)
+        iv.tintColor = .lightGray
+        iv.contentMode = .scaleAspectFit
+        iv.image = UIImage(systemName: "eye")
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        return iv
+    }()
+    let visualizatIonNumbersLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .lightGray
+        label.font = UIFont.systemFont(ofSize: 14)//UIFont.boldSystemFont(ofSize: 16)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    let commentsImageView: UIImageView = {
+        let iv = UIImageView()
+        iv.backgroundColor = .white
+        iv.image?.withRenderingMode(.alwaysTemplate)
+        iv.tintColor = .lightGray
+        iv.contentMode = .scaleAspectFit
+        iv.image = UIImage(systemName: "message")
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        return iv
+    }()
+    let commentsIonNumbersLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .lightGray
+        label.font = UIFont.systemFont(ofSize: 14)//UIFont.boldSystemFont(ofSize: 16)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    let nameLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .black
+        label.font = UIFont.boldSystemFont(ofSize: 16)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    //  ***********  ***********  ***********  ***********
     
     lazy var webView: WKWebView = {
         guard let path = Bundle.main.path(forResource: "style", ofType: "css") else {
@@ -68,7 +205,6 @@ class DetailNewsVC: UIViewController, WKNavigationDelegate, WKScriptMessageHandl
     override func viewDidLoad() {
         super.viewDidLoad()
         let html = selectedArticle.fullDescr ?? "Article not found"
-        print(html)
         loadHTMLContent(html)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0) {
             self.setupSubviews()
@@ -143,7 +279,6 @@ class DetailNewsVC: UIViewController, WKNavigationDelegate, WKScriptMessageHandl
         topView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -8).isActive = true
         webViewHeightConstraint = webView.heightAnchor.constraint(equalToConstant: 200)
         
-        
         contentView.addSubview(webView)
         webView.translatesAutoresizingMaskIntoConstraints = false
         webView.topAnchor.constraint(equalTo: topView.bottomAnchor, constant: 10).isActive = true
@@ -152,5 +287,25 @@ class DetailNewsVC: UIViewController, WKNavigationDelegate, WKScriptMessageHandl
         webView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8).isActive = true
         webViewHeightConstraint = webView.heightAnchor.constraint(equalToConstant: 200)
         webViewHeightConstraint?.isActive = true
+        
+        //  ***********  ***********  ***********  ***********
+        stackViewFirst.pin(to: topView)
+        stackViewFirst.VStack(view1.HStack(titleLabel,
+                                           spacing: 0, alignment: .leading, distribution: .fillProportionally),
+                              view1.HStack(authorLabel,
+                                           authorNameLabel,
+                                           spacing: 2, alignment: .leading, distribution: .fillProportionally),
+                              view2.HStack( view1.HStack(dateTimeimageView,
+                                                         dateTimePublicatedLabel,
+                                                         spacing: 2, alignment: .leading, distribution: .fillProportionally),
+                                            view1.HStack(visualizationImageView,
+                                                         visualizatIonNumbersLabel,
+                                                         spacing: 2, alignment: .leading, distribution: .fillProportionally),
+                                            view1.HStack(commentsImageView,
+                                                         commentsIonNumbersLabel,
+                                                         spacing: 2, alignment: .leading, distribution: .fillProportionally),
+                                            spacing: 15, alignment: .leading, distribution: .fillProportionally),
+                              spacing: 15, alignment: .leading, distribution: .equalSpacing)
+        //  ***********  ***********  ***********  ***********
     }
 }
