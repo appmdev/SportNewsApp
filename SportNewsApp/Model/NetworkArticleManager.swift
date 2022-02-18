@@ -19,13 +19,13 @@ struct NetworkArticlesManager {
         // ***************  ***************  ***************  ***************
         
         // autoposts scraped direclty from original site
-        let urlString = "https://appdeve.site/autoposts/articles/read\(category)Web.php?page=\(page)"// comment/uncomment me with next line of code nr2
-        let checkDatabase = false // this line nr2
+        //let urlString = "https://appdeve.site/autoposts/articles/read\(category)Web.php?page=\(page)"// comment/uncomment me with next line of code nr2
+        //let checkDatabase = false // this line nr2
         
         // ***************  ***************  ***************  ***************
         // autoposts scraped direclty from original site but has first 10 pages articles scraped in files on the side server
-        //let urlString = "https://appdeve.site/autoposts/articles/read\(category).php?page=\(page)" // comment/uncomment me with next line of code nr3
-        //let checkDatabase = false // this line nr3
+        let urlString = "https://appdeve.site/autoposts/articles/read\(category).php?page=\(page)" // comment/uncomment me with next line of code nr3
+        let checkDatabase = false // this line nr3
         // ***************  ***************  ***************  ***************
         
         getArticlesHelper(withUrlString: urlString, checkDatabase: checkDatabase)

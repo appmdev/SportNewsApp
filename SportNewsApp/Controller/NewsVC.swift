@@ -251,7 +251,7 @@ extension NewsVC: UITableViewDataSource, UITableViewDelegate {
             } else if indexPath.row == 1 {
                 //News
                 //let rootVC = ArticleVC()
-                let rootVC = NewsVC()
+                let rootVC = ArticleVC()
                 navigateNextVC(rootVC: rootVC)
             } else if indexPath.row == 2 {
                 //News

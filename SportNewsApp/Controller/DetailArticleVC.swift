@@ -9,7 +9,7 @@ import UIKit
 import WebKit
 import RealmSwift
 
-class DetailNewsVC: UIViewController, WKNavigationDelegate, WKScriptMessageHandler {
+class DetailArticleVC: UIViewController, WKNavigationDelegate, WKScriptMessageHandler {
     
     // MARK: Properties
     //var selectedArticle = ArticleRealm()
@@ -162,29 +162,6 @@ class DetailNewsVC: UIViewController, WKNavigationDelegate, WKScriptMessageHandl
         return label
     }()
     //  ***********  ***********  ***********  ***********
-    // bottom view
-    private let currentPostsTV = UITableView()
-    private let newsPostsTV = UITableView()
-    private let articlePostsTV = UITableView()
-    
-    var networkArticlesManager = NetworkArticlesManager()
-    //var networkNewsManager = NetworkNewsManager()
-    var newsPostsRealm: Results<ArticleRealm>!
-    var articlesPostsRealm: Results<ArticleRealm>!
-    
-    var currentPostsRealm: Results<ArticleRealm>!
-    
-    let identifierCurrent = "CurrentPostCell"
-    let identifierNews = "NewsPostCell"
-    let identifierArticle = "ArticlePostCell"
-    
-    let bottomView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .white
-        return view
-    }()
-    //  ***********  ***********  ***********  ***********
-    
     
     lazy var webView: WKWebView = {
         guard let path = Bundle.main.path(forResource: "style", ofType: "css") else {
@@ -224,88 +201,9 @@ class DetailNewsVC: UIViewController, WKNavigationDelegate, WKScriptMessageHandl
         super.viewDidLoad()
         let html = selectedArticle.fullDescr ?? "Article not found"
         loadHTMLContent(html)
-        setupSubviews()
-        setupLoad()
-        setupCurrnetPostsTableView()
-        setupNewsPostsTableView()
-        setupArticlesPostsTableView()
         DispatchQueue.main.asyncAfter(deadline: .now() + 0) {
-            //self.setupSubviews()
+            self.setupSubviews()
         }
-    }
-    
-    private func setupLoad() {
-        
-        let myCategory = "Articles"
-        
-        newsPostsRealm = realm.objects(ArticleRealm.self)
-        
-        articlesPostsRealm = realm.objects(ArticleRealm.self)
-        //articlesPostsRealm = realm.objects(ArticleRealm.self).filter("category = '2'")
-        //articlesPostsRealm = articlesPostsRealm.sorted(byKeyPath: "id", ascending: false)
-        
-        currentPostsRealm = realm.objects(ArticleRealm.self)
-        //currentPostsRealm = realm.objects(ArticleRealm.self).filter("category = '3'")
-        //currentPostsRealm = currentPostsRealm.sorted(byKeyPath: "id", ascending: false)
-        
-        //networkNewsManager.getFirstNewsArticleDataFromWeb(firstArticleId: "0", category: "News")
-        //networkArticlesManager.getArticleDataFromWeb(pagNr: 1, category: myCategory)
-        DispatchQueue.main.async {
-            self.newsPostsTV.reloadData()
-        }
-        //networkArticlesManager.getFirstArticleDataFromWeb(firstArticleId: "0", category: "Articles")
-        DispatchQueue.main.async {
-            self.currentPostsTV.reloadData()
-        }
-        //networkArticlesManager.getFirstArticleDataFromWeb(firstArticleId: "0", category: myCategory)
-        DispatchQueue.main.async {
-            self.articlePostsTV.reloadData()
-        }
-    }
-    private func setupCurrnetPostsTableView() {
-        //set delegates
-        currentPostsTV.delegate = self
-        currentPostsTV.dataSource = self
-        // set row height
-//        currentPostsTV.rowHeight = 60
-//        currentPostsTV.rowHeight = UITableView.automaticDimension
-        currentPostsTV.estimatedRowHeight = UITableView.automaticDimension
-        
-        // register cells
-        currentPostsTV.register(UITableViewCell.self, forCellReuseIdentifier: identifierCurrent)
-        
-        // hide empty cells at the bottom of the UITableView
-        currentPostsTV.tableFooterView = UIView()
-    }
-    private func setupNewsPostsTableView() {
-        //set delegates
-        newsPostsTV.delegate = self
-        newsPostsTV.dataSource = self
-        // set row height
-//        newsPostsTV.rowHeight = 60
-//        newsPostsTV.rowHeight = UITableView.automaticDimension
-        newsPostsTV.estimatedRowHeight = UITableView.automaticDimension
-        
-        // register cells
-        newsPostsTV.register(UITableViewCell.self, forCellReuseIdentifier: identifierNews)
-        
-        // hide empty cells at the bottom of the UITableView
-        newsPostsTV.tableFooterView = UIView()
-    }
-    private func setupArticlesPostsTableView() {
-        //set delegates
-        articlePostsTV.delegate = self
-        articlePostsTV.dataSource = self
-        // set row height
-//        articlePostsTV.rowHeight = 350
-//        articlePostsTV.rowHeight = UITableView.automaticDimension
-        articlePostsTV.estimatedRowHeight = UITableView.automaticDimension
-        
-        // register cells
-        articlePostsTV.register(ArticleTVCell.self, forCellReuseIdentifier: identifierArticle)
-        
-        // hide empty cells at the bottom of the UITableView
-        articlePostsTV.tableFooterView = UIView()
     }
     
     // MARK: Helper methods
@@ -367,9 +265,7 @@ class DetailNewsVC: UIViewController, WKNavigationDelegate, WKScriptMessageHandl
         contentView.leftAnchor.constraint(equalTo: scrollView.leftAnchor).isActive = true
         contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor).isActive = true
         contentView.rightAnchor.constraint(equalTo: scrollView.rightAnchor).isActive = true
-        // because: "Constraints between the height, width, or centers attach to the scroll view’s frame."
         contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor).isActive = true
-
         
         contentView.addSubview(topView)
         topView.translatesAutoresizingMaskIntoConstraints = false
@@ -383,11 +279,7 @@ class DetailNewsVC: UIViewController, WKNavigationDelegate, WKScriptMessageHandl
         webView.topAnchor.constraint(equalTo: topView.bottomAnchor, constant: 10).isActive = true
         webView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 8).isActive = true
         webView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -8).isActive = true
-        //webView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8).isActive = true
-        //webViewHeightConstraint = webView.heightAnchor.constraint(equalToConstant: 200)
-        //webViewHeightConstraint?.isActive = true
-        
-        contentView.addSubview(bottomView)
+        webView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8).isActive = true
         webViewHeightConstraint = webView.heightAnchor.constraint(equalToConstant: 200)
         webViewHeightConstraint?.isActive = true
         
@@ -410,113 +302,5 @@ class DetailNewsVC: UIViewController, WKNavigationDelegate, WKScriptMessageHandl
                                             spacing: 15, alignment: .leading, distribution: .fillProportionally),
                               spacing: 15, alignment: .leading, distribution: .equalSpacing)
         //  ***********  ***********  ***********  ***********
-        bottomView.anchor(top: webView.bottomAnchor, left: contentView.leftAnchor, bottom: contentView.bottomAnchor, right: contentView.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
-        
-        bottomView.addSubview(currentPostsTV)
-        bottomView.addSubview(newsPostsTV)
-        bottomView.addSubview(articlePostsTV)
-        
-        currentPostsTV.anchor(top: bottomView.topAnchor, left: bottomView.leftAnchor, bottom: nil, right: bottomView.rightAnchor, paddingTop: 10, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 420)
-        newsPostsTV.anchor(top: currentPostsTV.bottomAnchor, left: bottomView.leftAnchor, bottom: nil, right: bottomView.rightAnchor, paddingTop: 10, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 420)
-        articlePostsTV.anchor(top: newsPostsTV.bottomAnchor, left: bottomView.leftAnchor, bottom: bottomView.bottomAnchor, right: bottomView.rightAnchor, paddingTop: 10, paddingLeft: 0, paddingBottom: -10, paddingRight: 0, width: 0, height: 830)
-    }
-}
-extension DetailNewsVC: UITableViewDataSource, UITableViewDelegate {
-    
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section:Int) -> String?
-    {
-        let title = "Sensation"
-        if tableView == newsPostsTV {
-      return "Latest News"
-        }
-        if tableView == currentPostsTV {
-      return "Current News"
-        }
-        if tableView == articlePostsTV {
-      return "Latest Articles"
-        }
-        return title
-    }
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        var nrOfRows = 0
-        if tableView == newsPostsTV {
-            if newsPostsRealm.count == 0 {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                    self.newsPostsTV.reloadData()
-                }
-            }
-            if newsPostsRealm.count > 5 {
-                nrOfRows = 5
-            } else {
-                nrOfRows = newsPostsRealm.count
-            }
-        }
-        if tableView == currentPostsTV {
-            if currentPostsRealm.count == 0 {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                    self.currentPostsTV.reloadData()
-                }
-            }
-            if currentPostsRealm.count > 5 {
-                nrOfRows = 5
-            } else {
-                nrOfRows = currentPostsRealm.count
-            }
-        }
-        if tableView == articlePostsTV {
-            if articlesPostsRealm.count == 0 {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                    self.articlePostsTV.reloadData()
-                }
-            }
-            if articlesPostsRealm.count > 2 {
-                nrOfRows = 2
-            } else {
-                nrOfRows = articlesPostsRealm.count
-            }
-        }
-        return nrOfRows
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        var cellToReturn = UITableViewCell()
-        if tableView == newsPostsTV {
-            let cell = newsPostsTV.dequeueReusableCell(withIdentifier: identifierNews, for: indexPath)
-            let article = newsPostsRealm[indexPath.row]
-            
-            // ajusting line between cells
-            cell.separatorInset = UIEdgeInsets.init(top: 0.0, left: 25.0, bottom: 0.0, right: 25.0)
-            cell.layoutMargins = UIEdgeInsets.init(top: 0.0, left: 10.0, bottom: 0.0, right: 0.0)
-            cell.textLabel?.numberOfLines = 0
-            cell.textLabel?.text = article.title
-            cellToReturn = cell
-        }
-        if tableView == currentPostsTV {
-            let cell = currentPostsTV.dequeueReusableCell(withIdentifier: identifierCurrent, for: indexPath)
-            let article = currentPostsRealm[indexPath.row]
-
-            // ajusting line between cells
-            cell.separatorInset = UIEdgeInsets.init(top: 0.0, left: 25.0, bottom: 0.0, right: 25.0)
-            cell.layoutMargins = UIEdgeInsets.init(top: 0.0, left: 10.0, bottom: 0.0, right: 0.0)
-            cell.textLabel?.numberOfLines = 0
-            cell.textLabel?.text = article.title
-            cellToReturn = cell
-        }
-        if tableView == articlePostsTV {
-            let cell = articlePostsTV.dequeueReusableCell(withIdentifier: identifierArticle, for: indexPath) as! ArticleTVCell
-            let article = articlesPostsRealm[indexPath.row]
-
-            // ajusting line between cells
-            cell.separatorInset = UIEdgeInsets.init(top: 0.0, left: 10.0, bottom: 0.0, right: 25.0)
-            cell.layoutMargins = UIEdgeInsets.init(top: 0.0, left: 10.0, bottom: 0.0, right: 0.0)
-            cell.setArticle(withArticle: article)
-            cellToReturn = cell
-        }
-        return cellToReturn
-    }
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-            tableView.deselectRow(at: indexPath, animated: true)
     }
 }

@@ -14,6 +14,16 @@ public enum ViewSafeArea {
 import UIKit
 
 extension UIView {
+    func addConstraintsWithFormat(_ format: String, views: UIView...) {
+        var viewsDictionary = [String: UIView]()
+        for (index, view) in views.enumerated() {
+            let key = "v\(index)"
+            view.translatesAutoresizingMaskIntoConstraints = false
+            viewsDictionary[key] = view
+        }
+        
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: format, options: NSLayoutConstraint.FormatOptions(), metrics: nil, views: viewsDictionary))
+    }
     
     func center(inView view: UIView) {
         self.translatesAutoresizingMaskIntoConstraints = false
@@ -60,6 +70,16 @@ extension UIView {
         leadingAnchor.constraint(equalTo: superView.leadingAnchor).isActive = true
         trailingAnchor.constraint(equalTo: superView.trailingAnchor).isActive = true
         bottomAnchor.constraint(equalTo: superView.bottomAnchor).isActive = true
+        guard let superview = superview else { return }
+        widthAnchor.constraint(equalTo: superview.widthAnchor).isActive = true
+    }
+    func pinExcludingBottom(pinTopToBottomSuperview superViewTop: UIView, toMainSuperViewLeftRight superView: UIView) {
+        superView.addSubview(self)
+        translatesAutoresizingMaskIntoConstraints = false
+        topAnchor.constraint(equalTo: superViewTop.bottomAnchor, constant: 10).isActive = true
+        leadingAnchor.constraint(equalTo: superView.leadingAnchor, constant: 8).isActive = true
+        trailingAnchor.constraint(equalTo: superView.trailingAnchor, constant: -8).isActive = true
+        //bottomAnchor.constraint(equalTo: superView.bottomAnchor).isActive = true
 //        guard let superview = superview else { return }
 //        widthAnchor.constraint(equalTo: superview.widthAnchor).isActive = true
     }

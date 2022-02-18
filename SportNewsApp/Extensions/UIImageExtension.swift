@@ -11,18 +11,18 @@ import RealmSwift
 
 extension UIView {
     
-    func addConstraintsWithFormat(format: String, view: UIView) {
-        var allConstraints: [NSLayoutConstraint] = []
-        let thisView: [String: UIView] = ["v0": view]
-        let constraint = NSLayoutConstraint.constraints(
-            withVisualFormat: format,
-            metrics: nil,
-            views: thisView
-        )
-        allConstraints += constraint
-        view.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate(allConstraints)
-    }
+//    func addConstraintsWithFormat(format: String, view: UIView) {
+//        var allConstraints: [NSLayoutConstraint] = []
+//        let thisView: [String: UIView] = ["v0": view]
+//        let constraint = NSLayoutConstraint.constraints(
+//            withVisualFormat: format,
+//            metrics: nil,
+//            views: thisView
+//        )
+//        allConstraints += constraint
+//        view.translatesAutoresizingMaskIntoConstraints = false
+//        NSLayoutConstraint.activate(allConstraints)
+//    }
 }
 
 let imageCache = NSCache<NSString, UIImage>()
